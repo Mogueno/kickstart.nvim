@@ -191,6 +191,9 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'github/copilot.vim',
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
