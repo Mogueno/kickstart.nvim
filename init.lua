@@ -192,6 +192,52 @@ require('lazy').setup({
     },
   },
   {
+    'f-person/git-blame.nvim',
+    -- load the plugin at startup
+    event = 'VeryLazy',
+    -- Because of the keys part, you will be lazy loading this plugin.
+    -- The plugin wil only load once one of the keys is used.
+    -- If you want to load the plugin at startup, add something like event = "VeryLazy",
+    -- or lazy = false. One of both options will work.
+    opts = {
+      -- your configuration comes here
+      -- for example
+      enabled = true, -- if you want to enable the plugin
+      message_template = ' <summary> • <date> • <author> • <<sha>>', -- template for the blame message, check the Message template section for more options
+      date_format = '%m-%d-%Y %H:%M:%S', -- template for the date, check Date format section for more options
+      virtual_text_column = 1, -- virtual text start column, check Start virtual text at column section for more options
+    },
+  },
+  -- Show a line that represents the current line number in the gutter
+  {
+    'shellRaining/hlchunk.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      require('hlchunk').setup {
+        chunk = {
+          chars = {
+            horizontal_line = '─',
+            vertical_line = '│',
+            left_top = '┌',
+            left_bottom = '└',
+            right_arrow = '─',
+          },
+          style = '#00ffff',
+        },
+      }
+    end,
+  },
+  -- Show context when you scroll down on deep nested functions
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    event = 'VeryLazy',
+    opts = function()
+      local tsc = require 'treesitter-context'
+
+      return { mode = 'cursor', max_lines = 3 }
+    end,
+  },
+  {
     'github/copilot.vim',
   },
 
@@ -263,6 +309,32 @@ require('lazy').setup({
       },
     },
   },
+  { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
+  {
+    'akinsho/toggleterm.nvim',
+    cmd = 'ToggleTerm',
+    keys = function(_, keys)
+      local function toggleterm()
+        local venv = vim.b['virtual_env']
+        local term = require('toggleterm.terminal').Terminal:new {
+          env = venv and { VIRTUAL_ENV = venv } or nil,
+          count = vim.v.count > 0 and vim.v.count or 1,
+        }
+        term:toggle()
+      end
+      local mappings = {
+        { '<C-/>', mode = { 'n', 't' }, toggleterm, desc = 'Toggle Terminal' },
+        { '<C-_>', mode = { 'n', 't' }, toggleterm, desc = 'which_key_ignore' },
+      }
+      return vim.list_extend(mappings, keys)
+    end,
+    opts = {
+      open_mapping = false,
+      float_opts = {
+        border = 'curved',
+      },
+    },
+  },
 
   -- NOTE: Plugins can specify dependencies.
   --
@@ -291,7 +363,15 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-
+      {
+        'ryanmsnyder/toggleterm-manager.nvim',
+        dependencies = {
+          'akinsho/nvim-toggleterm.lua',
+          'nvim-telescope/telescope.nvim',
+          'nvim-lua/plenary.nvim', -- only needed because it's a dependency of telescope
+        },
+        config = true,
+      },
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
@@ -394,6 +474,26 @@ require('lazy').setup({
   },
 
   -- LSP Plugins
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+    config = function()
+      require('typescript-tools').setup {
+        on_attach = function(client, bufnr)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+        settings = {
+          jsx_close_tag = {
+            enable = true,
+            filetypes = { 'javascriptreact', 'typescriptreact' },
+          },
+        },
+      }
+    end,
+  },
+
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -658,11 +758,13 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd' },
+        javascript = { 'prettier', 'prettierd' },
+        javascriptreact = { 'prettier', 'prettierd' },
+        markdown = { 'prettierd' },
+        typescript = { 'prettier', 'prettierd' },
+        typescriptreact = { 'prettier', 'prettierd' },
+        ['*'] = { 'trim_whitespace' },
       },
     },
   },
