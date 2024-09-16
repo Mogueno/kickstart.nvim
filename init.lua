@@ -79,6 +79,16 @@ vim.opt.scrolloff = 10
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- navigate buffers
+vim.keymap.set('n', '<tab>', ':bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-tab>', ':bprevious<CR>', { desc = 'Previous buffer' })
+
+-- Changing the default f keyword
+vim.api.nvim_set_keymap('', 'f', "<cmd>lua require'hop'.hint_char1()<cr>", {})
+
+-- Pattern Matching with t keyword
+vim.api.nvim_set_keymap('n', 't', '<cmd>HopPattern<CR>', { noremap = true })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -126,6 +136,9 @@ vim.keymap.set('n', '<leader>zs', close_all_folds, { desc = '[s]hut all folds' }
 vim.keymap.set('n', '<leader>zo', open_all_folds, { desc = '[o]pen all folds' })
 -- Folding config end
 
+-- Gitblame keymaps
+vim.keymap.set('n', '<leader>gt', '<cmd>GitBlameToggle<cr>', { desc = 'GitBlame | Toggle Blame', silent = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -152,33 +165,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to force a plugin to be loaded.
-  --
-
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
-  --    require('gitsigns').setup({ ... })
-  --
-  -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -208,21 +197,34 @@ require('lazy').setup({
       virtual_text_column = 1, -- virtual text start column, check Start virtual text at column section for more options
     },
   },
+  {
+    'tribela/transparent.nvim',
+    event = 'VimEnter',
+    config = true,
+  },
   -- Show a line that represents the current line number in the gutter
   {
     'shellRaining/hlchunk.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'UiEnter', 'BufRead' },
     config = function()
       require('hlchunk').setup {
         chunk = {
+          enable = true,
+          use_treesitter = true,
           chars = {
-            horizontal_line = '─',
-            vertical_line = '│',
-            left_top = '┌',
-            left_bottom = '└',
-            right_arrow = '─',
+            horizontal_line = '━',
+            vertical_line = '┃',
+            left_top = '┏',
+            left_bottom = '┗',
+            right_arrow = '━',
           },
-          style = '#00ffff',
+        },
+        blank = {
+          enable = false,
+        },
+        line_num = {
+          enable = false,
+          use_treesitter = true,
         },
       }
     end,
@@ -235,6 +237,14 @@ require('lazy').setup({
       local tsc = require 'treesitter-context'
 
       return { mode = 'cursor', max_lines = 3 }
+    end,
+  },
+  -- Hop (Better Navigation)
+  {
+    'phaazon/hop.nvim',
+    lazy = true,
+    config = function()
+      require 'custom.plugins.hop-config'
     end,
   },
   {
@@ -494,6 +504,8 @@ require('lazy').setup({
     end,
   },
 
+  -- lualine
+  {},
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -906,6 +918,8 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
+  { 'numToStr/Comment.nvim', opts = {} },
+
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -1009,7 +1023,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
