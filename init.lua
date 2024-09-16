@@ -28,10 +28,7 @@ vim.opt.showmode = false
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+--  See `:help 'clipboard'` vim.schedule(function() vim.opt.clipboard = 'unnamedplus' end)
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -180,28 +177,6 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'f-person/git-blame.nvim',
-    -- load the plugin at startup
-    event = 'VeryLazy',
-    -- Because of the keys part, you will be lazy loading this plugin.
-    -- The plugin wil only load once one of the keys is used.
-    -- If you want to load the plugin at startup, add something like event = "VeryLazy",
-    -- or lazy = false. One of both options will work.
-    opts = {
-      -- your configuration comes here
-      -- for example
-      enabled = true, -- if you want to enable the plugin
-      message_template = ' <summary> • <date> • <author> • <<sha>>', -- template for the blame message, check the Message template section for more options
-      date_format = '%m-%d-%Y %H:%M:%S', -- template for the date, check Date format section for more options
-      virtual_text_column = 1, -- virtual text start column, check Start virtual text at column section for more options
-    },
-  },
-  {
-    'tribela/transparent.nvim',
-    event = 'VimEnter',
-    config = true,
-  },
   -- Show a line that represents the current line number in the gutter
   {
     'shellRaining/hlchunk.nvim',
@@ -239,18 +214,6 @@ require('lazy').setup({
       return { mode = 'cursor', max_lines = 3 }
     end,
   },
-  -- Hop (Better Navigation)
-  {
-    'phaazon/hop.nvim',
-    lazy = true,
-    config = function()
-      require 'custom.plugins.hop-config'
-    end,
-  },
-  {
-    'github/copilot.vim',
-  },
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -319,33 +282,6 @@ require('lazy').setup({
       },
     },
   },
-  { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
-  {
-    'akinsho/toggleterm.nvim',
-    cmd = 'ToggleTerm',
-    keys = function(_, keys)
-      local function toggleterm()
-        local venv = vim.b['virtual_env']
-        local term = require('toggleterm.terminal').Terminal:new {
-          env = venv and { VIRTUAL_ENV = venv } or nil,
-          count = vim.v.count > 0 and vim.v.count or 1,
-        }
-        term:toggle()
-      end
-      local mappings = {
-        { '<C-/>', mode = { 'n', 't' }, toggleterm, desc = 'Toggle Terminal' },
-        { '<C-_>', mode = { 'n', 't' }, toggleterm, desc = 'which_key_ignore' },
-      }
-      return vim.list_extend(mappings, keys)
-    end,
-    opts = {
-      open_mapping = false,
-      float_opts = {
-        border = 'curved',
-      },
-    },
-  },
-
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -896,7 +832,6 @@ require('lazy').setup({
       }
     end,
   },
-
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -908,13 +843,12 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight-storm'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
