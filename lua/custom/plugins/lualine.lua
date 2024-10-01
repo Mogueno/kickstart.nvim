@@ -1,3 +1,7 @@
+local git_blame = require 'gitblame'
+
+vim.g.gitblame_display_virtual_text = 0
+
 return {
   'nvim-lualine/lualine.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -24,17 +28,17 @@ return {
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'location', 'diagnostics' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'buffers' },
+        lualine_b = {},
+        lualine_c = { { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } },
+        lualine_x = {},
         lualine_y = {},
-        lualine_z = {},
+        lualine_z = { 'diagnostics' },
       },
       inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
+        lualine_c = {},
+        lualine_x = {},
         lualine_y = {},
         lualine_z = {},
       },
