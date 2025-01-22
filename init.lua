@@ -209,10 +209,13 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter-context',
     event = 'VeryLazy',
     opts = function()
-      local tsc = require 'treesitter-context'
-
       return { mode = 'cursor', max_lines = 3 }
     end,
+  },
+  {
+    'tribela/transparent.nvim',
+    event = 'VimEnter',
+    config = true,
   },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -431,7 +434,7 @@ require('lazy').setup({
     opts = {},
     config = function()
       require('typescript-tools').setup {
-        on_attach = function(client, bufnr)
+        on_attach = function(client)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
         end,
@@ -444,9 +447,6 @@ require('lazy').setup({
       }
     end,
   },
-
-  -- lualine
-  {},
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
@@ -673,6 +673,8 @@ require('lazy').setup({
             require('lspconfig')[server_name].setup(server)
           end,
         },
+        ensure_installed = {},
+        automatic_installation = true,
       }
     end,
   },
@@ -837,28 +839,10 @@ require('lazy').setup({
       }
     end,
   },
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'datsfilipe/min-theme.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'min-theme'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-
   { 'numToStr/Comment.nvim', opts = {} },
-
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
