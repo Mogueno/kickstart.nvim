@@ -63,9 +63,6 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
 
--- Show which line your cursor is on
-vim.opt.cursorline = true
-
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
@@ -216,6 +213,31 @@ require('lazy').setup({
     'tribela/transparent.nvim',
     event = 'VimEnter',
     config = true,
+  },
+  {
+    'navarasu/onedark.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('onedark').setup {
+        style = 'darker',
+        transparent = true,
+        lualine = {
+          transparent = true,
+        },
+        highlights = {
+          CursorLine = { bg = '#2a2a2a' },
+          CursorColumn = { bg = '#2a2a2a' },
+        },
+        -- Plugins Config --
+        diagnostics = {
+          darker = true, -- darker colors for diagnostic
+          undercurl = true, -- use undercurl instead of underline for diagnostics
+          background = true, -- use background color for virtual text
+        },
+      }
+      require('onedark').load()
+    end,
   },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -842,7 +864,6 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   { 'numToStr/Comment.nvim', opts = {} },
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
