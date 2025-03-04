@@ -209,36 +209,6 @@ require('lazy').setup({
       return { mode = 'cursor', max_lines = 3 }
     end,
   },
-  {
-    'tribela/transparent.nvim',
-    event = 'VimEnter',
-    config = true,
-  },
-  {
-    'navarasu/onedark.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require('onedark').setup {
-        style = 'darker',
-        transparent = true,
-        lualine = {
-          transparent = true,
-        },
-        highlights = {
-          CursorLine = { bg = '#2a2a2a' },
-          CursorColumn = { bg = '#2a2a2a' },
-        },
-        -- Plugins Config --
-        diagnostics = {
-          darker = true, -- darker colors for diagnostic
-          undercurl = true, -- use undercurl instead of underline for diagnostics
-          background = true, -- use background color for virtual text
-        },
-      }
-      require('onedark').load()
-    end,
-  },
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -307,8 +277,12 @@ require('lazy').setup({
       },
     },
   },
-  -- Min theme
-  { 'datsfilipe/min-theme.nvim' },
+  {
+    'craftzdog/solarized-osaka.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -423,6 +397,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.cmd.colorscheme 'solarized-osaka'
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -651,11 +627,6 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        harper_ls = {
-          codeActions = {
-            forceStable = true,
-          },
-        },
 
         lua_ls = {
           -- cmd = {...},
