@@ -311,12 +311,6 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'craftzdog/solarized-osaka.nvim',
-    lazy = false,
-    priority = 1000,
-    opts = {},
-  }, -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
   -- you do for a plugin at the top level, you can do for a dependency.
@@ -372,9 +366,6 @@ require('lazy').setup({
         --   },
         -- },
         pickers = {
-          find_files = {
-            theme = 'dropdown',
-          },
           colorscheme = {
             enable_preview = true,
           },
@@ -431,8 +422,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, {
         desc = '[ ] Find existing buffers',
       })
-
-      vim.cmd.colorscheme 'solarized-osaka'
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
