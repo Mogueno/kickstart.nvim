@@ -134,6 +134,7 @@ vim.keymap.set('n', '<leader>zo', open_all_folds, { desc = '[o]pen all folds' })
 
 -- Gitblame keymaps
 vim.keymap.set('n', '<leader>gt', '<cmd>GitBlameToggle<cr>', { desc = 'GitBlame | Toggle Blame', silent = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 -- Highlight when yanking (copying) text
@@ -336,6 +337,9 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      -- Using Lazy
+      --
+      { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
       {
         'ryanmsnyder/toggleterm-manager.nvim',
         dependencies = {
@@ -354,11 +358,13 @@ require('lazy').setup({
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
-        -- You can put your default mappings / updates / etc. in here
+
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
         defaults = {
           file_ignore_patterns = { 'node_modules' },
+
+          layout_strategy = 'horizontal',
+          path_display = { 'smart' }, -- show as much of the path as possible
         },
         -- defaults = {
         --   mappings = {
@@ -366,6 +372,9 @@ require('lazy').setup({
         --   },
         -- },
         pickers = {
+          find_files = {
+            hidden = true, -- optional, if you want hidden files in search
+          },
           colorscheme = {
             enable_preview = true,
           },
@@ -662,10 +671,7 @@ require('lazy').setup({
       --  - filetypes (table): Override the default list of associated filetypes for the server
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
-      --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local pid = vim.fn.getpid()
-      local omnisharp_bin = '/usr/local/bin/omnisharp-roslyn/OmniSharp'
-
+      --     :help lspconfig-all:help lspconfig-all   For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
         -- gopls = {},
@@ -674,39 +680,11 @@ require('lazy').setup({
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
+        --    https://github.com/pmizio/typescript-tools.nvimil
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-        omnisharp = {
-          enable_roslyn_analysers = true,
-          enable_import_completion = true,
-          organize_imports_on_format = true,
-          enable_decompilation_support = true,
-          filetypes = { 'cs', 'vb', 'csproj', 'sln', 'slnx', 'props', 'csx', 'targets', 'tproj', 'slngen', 'fproj' },
-          cmd = { omnisharp_bin, '--languageserver', '--hostPID', tostring(pid) },
-          on_attach = function(client, bufnr)
-            -- Disable formatting for omnisharp, since it conflicts with other formatters
-            client.server_capabilities.documentFormattingProvider = false
-            client.server_capabilities.documentRangeFormattingProvider = false
-
-            -- Set up keymaps for omnisharp
-            local map = function(keys, func, desc)
-              vim.keymap.set('n', keys, func, {
-                buffer = bufnr,
-                desc = 'OmniSharp: ' .. desc,
-              })
-            end
-
-            map('<leader>go', vim.lsp.buf.type_definition, '[G]oto [O]mnisharp Type Definition')
-            map('<leader>gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-            map('<leader>gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-            map('<leader>gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-            map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-          end,
-        },
-
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -723,13 +701,20 @@ require('lazy').setup({
         },
       }
 
+      vim.lsp.enable 'sqls'
+
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      require('mason').setup {
+        registries = {
+          'github:mason-org/mason-registry',
+          'github:Crashdummyy/mason-registry',
+        },
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
@@ -775,6 +760,17 @@ require('lazy').setup({
       },
     },
     opts = {
+      async = true,
+      formatters = {
+        csharpier = {
+          command = 'csharpier',
+          args = {
+            'format',
+            '--write-stdout',
+          },
+          to_stdin = true,
+        },
+      },
       notify_on_error = false,
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -784,6 +780,7 @@ require('lazy').setup({
         markdown = { 'prettierd' },
         typescript = { 'prettierd' },
         typescriptreact = { 'prettierd' },
+        cs = { 'csharpier' },
         ['*'] = { 'trim_whitespace' },
       },
     },
@@ -1031,6 +1028,9 @@ require('lazy').setup({
     },
   },
 })
+
+-- Colroscheme catpuccin
+vim.cmd.colorscheme 'catppuccin-mocha'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
