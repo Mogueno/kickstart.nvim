@@ -2,9 +2,17 @@ return {
   {
     'akinsho/bufferline.nvim',
     version = '*',
+    event = 'VeryLazy',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
-      require('bufferline').setup {}
+      require('bufferline').setup {
+        options = {
+          diagnostics = 'nvim_lsp',
+          separator_style = 'slant',
+          show_buffer_close_icons = false,
+          show_close_icon = false,
+        },
+      }
     end,
   },
 }

@@ -1,11 +1,13 @@
-local git_blame = require 'gitblame'
-
-vim.g.gitblame_display_virtual_text = 0
-
 return {
   'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  dependencies = { 
+    'nvim-tree/nvim-web-devicons',
+    'f-person/git-blame.nvim', -- Ensure git-blame loads first
+  },
   config = function()
+    local git_blame = require 'gitblame'
+    vim.g.gitblame_display_virtual_text = 0
+    
     require('lualine').setup {
       options = {
         icons_enabled = true,
