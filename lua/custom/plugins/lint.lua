@@ -47,6 +47,10 @@ return {
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
+          -- Skip linting for copilot chat buffers and disabled buffers
+          if vim.b.lint_disable or vim.bo.buftype ~= '' or vim.fn.match(vim.fn.expand('%:p'), 'copilot-') ~= -1 then
+            return
+          end
           lint.try_lint()
         end,
       })

@@ -230,7 +230,15 @@ require('lazy').setup({
          defaults = {
            file_ignore_patterns = { 'node_modules', '.git', 'dist', 'build', '%.lock' },
 
-           layout_strategy = 'horizontal',
+           layout_strategy = 'vertical',
+           layout_config = {
+             vertical = {
+               height = 0.9,
+               preview_cutoff = 40,
+               prompt_position = 'top',
+               width = 0.8,
+             },
+           },
            path_display = { 'smart' }, -- show as much of the path as possible
          },
         -- defaults = {
@@ -254,6 +262,31 @@ require('lazy').setup({
                 ['<c-d>'] = 'delete_buffer',
               },
             },
+          },
+          -- Ensure LSP pickers use the same path_display as defaults
+          lsp_references = {
+            path_display = { 'smart' },
+          },
+          lsp_definitions = {
+            path_display = { 'smart' },
+          },
+          lsp_implementations = {
+            path_display = { 'smart' },
+          },
+          lsp_type_definitions = {
+            path_display = { 'smart' },
+          },
+          lsp_document_symbols = {
+            path_display = { 'smart' },
+          },
+          lsp_dynamic_workspace_symbols = {
+            path_display = { 'smart' },
+          },
+          live_grep = {
+            path_display = { 'smart' },
+          },
+          grep_string = {
+            path_display = { 'smart' },
           },
         },
 
@@ -475,6 +508,53 @@ require('lazy').setup({
         },
         completion = {
           completeopt = 'menu,menuone,noinsert',
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        formatting = {
+          format = function(entry, vim_item)
+            -- Kind icons
+            local kind_icons = {
+              Text = "󰉿",
+              Method = "󰆧",
+              Function = "󰊕",
+              Constructor = "",
+              Field = "󰜢",
+              Variable = "󰀫",
+              Class = "󰠱",
+              Interface = "",
+              Module = "",
+              Property = "󰜢",
+              Unit = "󰑭",
+              Value = "󰎠",
+              Enum = "",
+              Keyword = "󰌋",
+              Snippet = "",
+              Color = "󰏘",
+              File = "󰈙",
+              Reference = "󰈇",
+              Folder = "󰉋",
+              EnumMember = "",
+              Constant = "󰏿",
+              Struct = "󰙅",
+              Event = "",
+              Operator = "󰆕",
+              TypeParameter = "",
+            }
+            
+            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
+            vim_item.menu = ({
+              copilot = "[Copilot]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[LuaSnip]",
+              path = "[Path]",
+              lazydev = "[LazyDev]",
+            })[entry.source.name]
+            
+            return vim_item
+          end,
         },
 
         -- For an understanding of why these mappings were
