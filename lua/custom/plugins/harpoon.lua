@@ -36,16 +36,16 @@ return {
     end, { desc = 'Open harpoon window' })
 
     -- Quick access to first 4 files
-    vim.keymap.set('n', '<C-h>', function()
+    vim.keymap.set('n', '<leader>1', function()
       harpoon:list():select(1)
     end, { desc = 'Go to harpoon file 1' })
-    vim.keymap.set('n', '<C-t>', function()
+    vim.keymap.set('n', '<leader>2', function()
       harpoon:list():select(2)
     end, { desc = 'Go to harpoon file 2' })
-    vim.keymap.set('n', '<C-n>', function()
+    vim.keymap.set('n', '<leader>3', function()
       harpoon:list():select(3)
     end, { desc = 'Go to harpoon file 3' })
-    vim.keymap.set('n', '<C-s>', function()
+    vim.keymap.set('n', '<leader>4', function()
       harpoon:list():select(4)
     end, { desc = 'Go to harpoon file 4' })
 
