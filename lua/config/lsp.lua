@@ -181,6 +181,8 @@ function M.setup()
     -- But for many setups, the LSP (`tsserver`) will work just fine
     -- tsserver = {},
     --
+    ts_ls = {},
+    eslint = {},
     lua_ls = {
       -- cmd = {...},
       -- filetypes = { ...},
@@ -216,6 +218,9 @@ function M.setup()
   local mason_packages = {
     'lua-language-server', -- LSP server name: lua_ls
     'stylua', -- Used to format Lua code
+    'typescript-language-server', -- LSP server name: ts_ls
+    'eslint-lsp', -- LSP server name: eslint
+    'prettierd', -- Formatter for JS/TS
   }
   require('mason-tool-installer').setup {
     ensure_installed = mason_packages,

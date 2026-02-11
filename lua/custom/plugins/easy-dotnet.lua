@@ -4,6 +4,12 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope.nvim' },
     config = function()
       require('easy-dotnet').setup {
+        lsp = {
+          enabled = false,
+          setup_csharp_ls = false,
+          setup_omnisharp = false,
+          omnisharp_path = nil, -- e.g., '/path/to/omnisharp-roslyn/run'
+        },
         test_runner = {
           viewmode = 'float',
           enable_buffer_test_execution = true,

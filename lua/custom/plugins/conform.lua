@@ -19,12 +19,14 @@ return {
     async = true,
     formatters = {
       csharpier = {
-        command = 'csharpier',
-        args = {
-          'format',
-          '--write-stdout',
-        },
-        to_stdin = true,
+        command = 'dotnet-csharpier',
+        args = {},
+        stdin = true,
+        condition = function(self, ctx)
+          return vim.fn.executable('dotnet-csharpier') == 1
+        end,
+        -- Ensure CSharpier respects .editorconfig by not passing --config-path
+        inherit = false,
       },
     },
     notify_on_error = false,

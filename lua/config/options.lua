@@ -67,3 +67,9 @@ vim.opt.foldtext = ''
 vim.opt.foldnestmax = 3
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
+
+-- Tab/Space settings
+vim.opt.expandtab = true   -- Use spaces instead of tabs
+vim.opt.tabstop = 4        -- Number of spaces a tab counts for
+vim.opt.shiftwidth = 4     -- Number of spaces for autoindent
+vim.opt.softtabstop = 4    -- Number of spaces for tab key
