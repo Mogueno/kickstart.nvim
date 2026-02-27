@@ -67,8 +67,53 @@ require('lazy').setup({
   },
 })
 
--- Colroscheme catpuccin
-vim.cmd.colorscheme 'catppuccin-mocha'
+-- Colorscheme Monokai Pro Spectrum (matching Ghostty theme)
+vim.cmd.colorscheme 'monokai-pro'
+
+-- Custom highlight for lines with hints/code actions available
+-- Subtle dark blue-gray background tint
+-- Configure diagnostics with custom signs (Neovim 0.11+ API)
+-- Using Nerd Font icons via unicode escapes
+local diagnostic_icons = {
+  ERROR = '\u{f057}', -- nf-fa-times_circle
+  WARN = '\u{f071}',  -- nf-fa-exclamation_triangle
+  INFO = '\u{f05a}',  -- nf-fa-info_circle
+  HINT = '\u{f0eb}',  -- nf-fa-lightbulb_o
+}
+
+local function setup_diagnostics()
+  vim.api.nvim_set_hl(0, 'DiagnosticLineHint', { bg = '#2d3548' })
+
+  -- Force underline highlights with both undercurl and underline fallback
+  vim.api.nvim_set_hl(0, 'DiagnosticUnderlineError', { undercurl = true, underline = true, sp = '#fc618d' })
+  vim.api.nvim_set_hl(0, 'DiagnosticUnderlineWarn', { undercurl = true, underline = true, sp = '#ffd866' })
+  vim.api.nvim_set_hl(0, 'DiagnosticUnderlineInfo', { undercurl = true, underline = true, sp = '#78dce8' })
+  vim.api.nvim_set_hl(0, 'DiagnosticUnderlineHint', { undercurl = true, underline = true, sp = '#78dce8' })
+
+  vim.diagnostic.config {
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = diagnostic_icons.ERROR,
+        [vim.diagnostic.severity.WARN] = diagnostic_icons.WARN,
+        [vim.diagnostic.severity.INFO] = diagnostic_icons.INFO,
+        [vim.diagnostic.severity.HINT] = diagnostic_icons.HINT,
+      },
+      linehl = {
+        [vim.diagnostic.severity.HINT] = 'DiagnosticLineHint',
+      },
+    },
+    underline = true,
+    virtual_text = false,
+    update_in_insert = false,
+    severity_sort = true,
+  }
+end
+
+-- Run on startup and whenever colorscheme changes
+setup_diagnostics()
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = setup_diagnostics,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

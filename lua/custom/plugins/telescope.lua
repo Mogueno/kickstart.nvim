@@ -12,7 +12,16 @@ return {
       end,
     },
     { 'nvim-telescope/telescope-ui-select.nvim' },
-    { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
+    {
+      'loctvl842/monokai-pro.nvim',
+      lazy = false,
+      priority = 1000,
+      config = function()
+        require('monokai-pro').setup({
+          filter = 'spectrum',
+        })
+      end,
+    },
     {
       'ryanmsnyder/toggleterm-manager.nvim',
       dependencies = {

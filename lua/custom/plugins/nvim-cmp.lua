@@ -66,7 +66,6 @@ return {
           
           vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
           vim_item.menu = ({
-            copilot = "[Copilot]",
             nvim_lsp = "[LSP]",
             luasnip = "[LuaSnip]",
             path = "[Path]",
@@ -105,9 +104,6 @@ return {
         {
           name = 'lazydev',
           group_index = 0,
-        },
-        {
-          name = 'copilot',
         },
         {
           name = 'nvim_lsp',

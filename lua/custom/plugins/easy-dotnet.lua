@@ -85,31 +85,31 @@ return {
 
       -- Set up keymaps for easy-dotnet
       local dotnet = require 'easy-dotnet'
-      vim.keymap.set('n', '<leader>dr', dotnet.run, { desc = 'Dotnet: Run project' })
-      vim.keymap.set('n', '<leader>dR', dotnet.run_default, { desc = 'Dotnet: Run default project' })
-      vim.keymap.set('n', '<leader>db', dotnet.build, { desc = 'Dotnet: Build project' })
-      vim.keymap.set('n', '<leader>dB', dotnet.build_default, { desc = 'Dotnet: Build default project' })
-      vim.keymap.set('n', '<leader>dt', dotnet.test, { desc = 'Dotnet: Test project' })
-      vim.keymap.set('n', '<leader>dT', dotnet.test_default, { desc = 'Dotnet: Test default project' })
-      vim.keymap.set('n', '<leader>dw', dotnet.watch, { desc = 'Dotnet: Watch project' })
-      vim.keymap.set('n', '<leader>dW', dotnet.watch_default, { desc = 'Dotnet: Watch default project' })
-      vim.keymap.set('n', '<leader>dn', dotnet.new, { desc = 'Dotnet: New template' })
-      vim.keymap.set('n', '<leader>ds', dotnet.secrets, { desc = 'Dotnet: User secrets' })
-      vim.keymap.set('n', '<leader>dc', dotnet.clean, { desc = 'Dotnet: Clean solution' })
-      vim.keymap.set('n', '<leader>dS', dotnet.restore, { desc = 'Dotnet: Restore solution' })
+      vim.keymap.set('n', '<leader>Dr', dotnet.run, { desc = 'Dotnet: Run project' })
+      vim.keymap.set('n', '<leader>DR', dotnet.run_default, { desc = 'Dotnet: Run default project' })
+      vim.keymap.set('n', '<leader>Db', dotnet.build, { desc = 'Dotnet: Build project' })
+      vim.keymap.set('n', '<leader>DB', dotnet.build_default, { desc = 'Dotnet: Build default project' })
+      vim.keymap.set('n', '<leader>Dt', dotnet.test, { desc = 'Dotnet: Test project' })
+      vim.keymap.set('n', '<leader>DT', dotnet.test_default, { desc = 'Dotnet: Test default project' })
+      vim.keymap.set('n', '<leader>Dw', dotnet.watch, { desc = 'Dotnet: Watch project' })
+      vim.keymap.set('n', '<leader>DW', dotnet.watch_default, { desc = 'Dotnet: Watch default project' })
+      vim.keymap.set('n', '<leader>Dn', dotnet.new, { desc = 'Dotnet: New template' })
+      vim.keymap.set('n', '<leader>Ds', dotnet.secrets, { desc = 'Dotnet: User secrets' })
+      vim.keymap.set('n', '<leader>Dc', dotnet.clean, { desc = 'Dotnet: Clean solution' })
+      vim.keymap.set('n', '<leader>DS', dotnet.restore, { desc = 'Dotnet: Restore solution' })
       
       -- Test runner
       vim.keymap.set('n', '<leader>tt', dotnet.testrunner, { desc = 'Dotnet: Toggle test runner' })
       vim.keymap.set('n', '<leader>tT', dotnet.testrunner_refresh, { desc = 'Dotnet: Refresh test runner' })
       
       -- Package management
-      vim.keymap.set('n', '<leader>da', dotnet.add_package, { desc = 'Dotnet: Add package' })
-      vim.keymap.set('n', '<leader>do', dotnet.outdated, { desc = 'Dotnet: Show outdated packages' })
+      vim.keymap.set('n', '<leader>Da', dotnet.add_package, { desc = 'Dotnet: Add package' })
+      vim.keymap.set('n', '<leader>Do', dotnet.outdated, { desc = 'Dotnet: Show outdated packages' })
 
       -- Add which-key mappings
       local wk = require 'which-key'
       wk.add {
-        { '<leader>d', group = '[D]otnet', mode = { 'n', 'v' } },
+        { '<leader>D', group = '[D]otnet', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]ests', mode = { 'n', 'v' } },
       }
     end,

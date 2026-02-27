@@ -31,9 +31,15 @@ return {
       harpoon:list():add()
     end, { desc = 'Add file to harpoon' })
 
+    -- Open harpoon quick menu (editable - delete/reorder files here)
     vim.keymap.set('n', '<C-e>', function()
+      harpoon.ui:toggle_quick_menu(harpoon:list())
+    end, { desc = 'Open harpoon menu (editable)' })
+
+    -- Open harpoon via Telescope (searchable)
+    vim.keymap.set('n', '<leader>he', function()
       toggle_telescope(harpoon:list())
-    end, { desc = 'Open harpoon window' })
+    end, { desc = 'Search harpoon files (Telescope)' })
 
     -- Quick access to first 4 files
     vim.keymap.set('n', '<leader>1', function()
@@ -50,10 +56,10 @@ return {
     end, { desc = 'Go to harpoon file 4' })
 
     -- Toggle previous & next buffers stored within Harpoon list
-    vim.keymap.set('n', '<C-S-P>', function()
+    vim.keymap.set('n', '[h', function()
       harpoon:list():prev()
     end, { desc = 'Go to previous harpoon file' })
-    vim.keymap.set('n', '<C-S-N>', function()
+    vim.keymap.set('n', ']h', function()
       harpoon:list():next()
     end, { desc = 'Go to next harpoon file' })
   end,
